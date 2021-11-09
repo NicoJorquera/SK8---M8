@@ -1,0 +1,85 @@
+<div class="py-4">
+
+  <table class="table table-dark">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Foto</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Años de experiencia</th>
+        <th scope="col">Especialidad</th>
+        <th scope="col">Estado</th>
+      </tr>
+    </thead>
+    {{!<tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>
+          <div></div>
+        </td>
+        <td>Tony Hawk</td>
+        <td>12</td>
+        <td>Kickflip</td>
+        <td class="text-success font-weight-bold">Aprobado</td>
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td>
+          <div></div>
+        </td>
+        <td>Evelien Bouilliart</td>
+        <td>10</td>
+        <td>Heelflip</td>
+        <td class="text-success font-weight-bold">Aprobado</td>
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <td>
+          <div></div>
+        </td>
+        <td>Danny Way</td>
+        <td>8</td>
+        <td>Ollie</td>
+        <td class="text-warning font-weight-bold">En revisión</td>
+      </tr>
+    </tbody>}}
+
+    <tbody id="cuerpo">
+
+    </tbody>
+  </table>
+  <a href="/login">Iniciar Sesión</a> |
+  <a href="/registro">Registrarme</a>
+</div>
+
+<script>
+  let url = 'http://localhost:3000/registro/all';
+  let tbody = document.getElementById('cuerpo');
+  window.onload = getData();
+
+  async function getData() {
+    await axios.get(url).then((data) => {
+      const {data: usuarios} = data;
+      let estado;
+      usuarios.forEach((c, i) => {
+        if (c.estado == false) {
+          estado = '<td class="text-warning font-weight-bold">En revisión</td>';
+        } else {
+          estado = '<td class="text-success font-weight-bold">Aprobado</td>'
+        }
+        const ruta_foto = `/img/${c.foto}`
+
+        tbody.innerHTML += `
+          <tr>
+            <td>${i + 1}</td>
+            <td><img src='${ruta_foto}' style='width:100px;'></td>
+            <td>${c.nombre}</td>
+            <td>${c.anos_experiencia}</td>
+            <td>${c.especialidad}</td>
+            ${estado}
+          </tr>
+        `
+      })
+    })
+  }
+</script>
